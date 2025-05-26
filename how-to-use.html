@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Use - JSON to TypeScript Interface Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .dark {
+      background-color: #1e293b;
+      color: #f1f5f9;
+    }
+    .dark .bg-white {
+      background-color: #2d3748;
+    }
+    .dark .text-gray-900 {
+      color: #f1f5f9;
+    }
+    .dark .text-gray-700 {
+      color: #d1d5db;
+    }
+    .dark .text-gray-500 {
+      color: #9ca3af;
+    }
+    .dark .bg-gray-100 {
+      background-color: #374151;
+    }
+    .dark .bg-indigo-600 {
+      background-color: #4f46e5;
+    }
+    .dark .hover\:bg-indigo-700:hover {
+      background-color: #4338ca;
+    }
+    @media (max-width: 640px) {
+      .container {
+        padding: 1rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      h2 {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-2 sm:p-4 md:p-8 transition-colors duration-300">
+  <div class="container max-w-5xl mx-auto bg-white shadow-2xl rounded-2xl p-4 sm:p-6 md:p-8 space-y-6 dark:bg-gray-800">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">How to Use the JSON to TypeScript Interface Generator</h1>
+      <div class="flex items-center space-x-4">
+        <a href="index.html" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-lg transition font-medium dark:bg-indigo-600 dark:hover:bg-indigo-700" aria-label="Back to tool">Back to Tool</a>
+        <button id="themeToggle" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 transition" aria-label="Toggle dark mode">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Overview</h2>
+      <p class="text-gray-700 dark:text-gray-100">
+        The JSON to TypeScript Interface Generator is a tool that converts JSON data into TypeScript interfaces. It simplifies the process of creating type-safe code for APIs, configurations, or data models by generating interfaces with proper type annotations.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">How to Use the Tool</h2>
+      <p class="text-gray-700 dark:text-gray-100">Follow these steps to generate a TypeScript interface:</p>
+      <ol class="list-decimal pl-5 space-y-2 text-gray-700 dark:text-gray-100">
+        <li>
+          <strong>Step 1: Enter JSON</strong>
+          <ul class="list-disc pl-5 mt-1 text-gray-500 dark:text-gray-400">
+            <li>Input valid JSON in the textarea or select a template (e.g., User Profile) from the dropdown.</li>
+            <li>Upload a JSON file using the file input or drag-and-drop a file onto the textarea.</li>
+            <li>Use "Minify JSON" to compress or "Beautify JSON" to format the input.</li>
+            <li>JSON is validated in real-time; errors are shown below the textarea.</li>
+            <li>Click "Next: Options" to proceed (only enabled for valid JSON).</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Step 2: Configure Options</strong>
+          <ul class="list-disc pl-5 mt-1 text-gray-500 dark:text-gray-400">
+            <li>Select an interface name (e.g., RootObject, ApiResponse) or choose "Custom" to enter a custom name.</li>
+            <li>Check "Optional Properties" to make all properties optional (adds `?` to fields).</li>
+            <li>Check "Use Tabs for Indentation" to use tabs instead of spaces.</li>
+            <li>Click "Generate Interface" to create the interface or "Back" to return to Step 1.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Step 3: View and Export</strong>
+          <ul class="list-disc pl-5 mt-1 text-gray-500 dark:text-gray-400">
+            <li>View the generated TypeScript interface with syntax highlighting.</li>
+            <li>Click "Copy to Clipboard" to copy the code.</li>
+            <li>Click "Download .ts" to save the interface as a `.ts` file.</li>
+            <li>Click "Share" to generate a shareable URL with your JSON and settings.</li>
+            <li>Click "Back" to return to Step 2 or "Start Over" to reset to Step 1.</li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Features</h2>
+      <ul class="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-100">
+        <li><strong>Real-Time Validation</strong>: Instantly checks JSON for errors.</li>
+        <li><strong>Syntax Highlighting</strong>: Displays TypeScript output with color-coded formatting.</li>
+        <li><strong>Undo/Redo</strong>: Revert or restore changes to JSON or settings.</li>
+        <li><strong>File Upload & Drag-and-Drop</strong>: Import JSON files easily.</li>
+        <li><strong>JSON Formatting</strong>: Minify or beautify JSON input.</li>
+        <li><strong>Templates</strong>: Use predefined JSON samples to get started.</li>
+        <li><strong>Shareable Links</strong>: Share your JSON and settings via URL.</li>
+        <li><strong>Dark Mode</strong>: Toggle between light and dark themes for better visibility.</li>
+        <li><strong>Responsive Design</strong>: Works on desktop and mobile devices.</li>
+      </ul>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Tips</h2>
+      <ul class="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-100">
+        <li>Use templates for quick testing or inspiration.</li>
+        <li>Save your work by generating a shareable link to revisit later.</li>
+        <li>Enable "Optional Properties" for flexible interfaces when some fields may be missing.</li>
+        <li>Drag-and-drop large JSON files to avoid manual copying.</li>
+        <li>Toggle dark mode for better visibility in low-light environments.</li>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+    // Initialize theme
+    if (isDarkMode) {
+      document.body.classList.add('dark');
+    }
+
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      document.body.classList.toggle('dark', isDarkMode);
+      localStorage.setItem('darkMode', isDarkMode);
+    }
+
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  </script>
+</body>
+</html>
