@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JSON to TypeScript Interface</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .dark {
+      background-color: #1e293b;
+      color: #f1f5f9;
+    }
+    .dark .bg-white {
+      background-color: #2d3748;
+    }
+    .dark .text-gray-900 {
+      color: #f1f5f9;
+    }
+    .dark .text-gray-700 {
+      color: #d1d5db;
+    }
+    .dark .text-gray-500 {
+      color: #9ca3af;
+    }
+    .dark .border-gray-300 {
+      border-color: #4b5563;
+    }
+    .dark .bg-gray-100 {
+      background-color: #374151;
+    }
+    .dark .bg-gray-800 {
+      background-color: #2d3748;
+    }
+    .dark .text-gray-100 {
+      color: #f1f5f9;
+    }
+    .dark .bg-indigo-600 {
+      background-color: #4f46e5;
+    }
+    .dark .hover\:bg-indigo-700:hover {
+      background-color: #4338ca;
+    }
+    .dark .bg-green-600 {
+      background-color: #15803d;
+    }
+    .dark .hover\:bg-green-700:hover {
+      background-color: #166534;
+    }
+    .dark .bg-blue-600 {
+      background-color: #2563eb;
+    }
+    .dark .hover\:bg-blue-700:hover {
+      background-color: #1d4ed8;
+    }
+    .dark input, .dark textarea, .dark select {
+      background-color: #2d3748;
+      color: #ffffff;
+      border-color: #4b5563;
+    }
+    .dark input::placeholder, .dark textarea::placeholder {
+      color: #9ca3af;
+    }
+    .animate-pulse {
+      animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .tooltip {
+      position: relative;
+    }
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 120px;
+      background-color: #1e293b;
+      color: #f1f5f9;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 10;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    .error-line {
+      background-color: rgba(239, 68, 68, 0.2);
+    }
+    .fade-enter {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .fade-enter-active {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .fade-exit {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-exit-active {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .step {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background-color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: #6b7280;
+      transition: all 0.3s ease;
+    }
+    .step.active {
+      background-color: #4f46e5;
+      color: #ffffff;
+    }
+    .dark .step {
+      background-color: #4b5563;
+      color: #d1d5db;
+    }
+    .dark .step.active {
+      background-color: #4f46e5;
+      color: #f1f5f9;
+    }
+    @media (max-width: 640px) {
+      .container {
+        padding: 1rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      .action-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .action-buttons button {
+        width: 100%;
+        padding: 0.75rem;
+      }
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+      .checkbox-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      #jsonInput, #tsOutput {
+        font-size: 0.875rem;
+      }
+      .step-indicator {
+        gap: 0.5rem;
+      }
+      .step {
+        width: 1.5rem;
+        height: 1.5rem;
+        font-size: 0.875rem;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-2 sm:p-4 md:p-8 transition-colors duration-300">
+  <div class="container max-w-5xl mx-auto bg-white shadow-2xl rounded-2xl p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8 dark:bg-gray-800">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">JSON to TypeScript Interface Generator</h1>
+      <div class="flex items-center space-x-4">
+        <a href="how-to-use.html" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded-lg transition font-medium dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-100" aria-label="How to use this tool">How to Use</a>
+        <button id="themeToggle" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 transition" aria-label="Toggle dark mode">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+      <div class="step active" data-step="1">1</div>
+      <div class="step" data-step="2">2</div>
+      <div class="step" data-step="3">3</div>
+    </div>
+
+    <!-- Step 1: JSON Input -->
+    <div id="step1" class="step-content fade-enter-active">
+      <label for="jsonTemplates" class="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2">Select JSON Template</label>
+      <select id="jsonTemplates" class="w-full border border-gray-300 rounded-lg p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" aria-describedby="jsonTemplatesDesc">
+        <option value="">Select a template...</option>
+        <option value='{"name": "Alice", "age": 30, "email": "alice@example.com"}'>User Profile</option>
+        <option value='{"id": 1, "title": "Post", "tags": ["news", "tech"]}'>Blog Post</option>
+      </select>
+      <p id="jsonTemplatesDesc" class="text-xs text-gray-500 dark:text-gray-400 mb-2">Choose a sample JSON to get started</p>
+
+      <label for="jsonInput" class="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2">Enter JSON</label>
+      <div class="flex space-x-2 mb-2">
+        <button onclick="minifyJSON()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded-lg transition font-medium dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-100" aria-label="Minify JSON">Minify JSON</button>
+        <button onclick="beautifyJSON()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded-lg transition font-medium dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-100" aria-label="Beautify JSON">Beautify JSON</button>
+      </div>
+      <div class="relative">
+        <textarea id="jsonInput" rows="8" class="w-full border border-gray-300 rounded-lg p-3 sm:p-4 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition resize-y"
+          placeholder='{
+  "name": "Alice",
+  "age": 30,
+  "profile": { "email": "alice@example.com" }
+}'
+          aria-describedby="jsonInputDesc"></textarea>
+        <p id="jsonInputDesc" class="text-xs text-gray-500 dark:text-gray-400 mt-1">Enter valid JSON to generate TypeScript interfaces</p>
+        <p id="jsonError" class="text-xs text-red-600 dark:text-red-400 mt-1 hidden"></p>
+      </div>
+      <div class="mt-2">
+        <input type="file" id="fileInput" accept=".json" class="text-sm text-gray-500 dark:text-gray-400" aria-label="Upload JSON file" />
+      </div>
+      <div class="flex justify-end mt-4">
+        <button onclick="nextStep(2)"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 sm:px-6 py-2 rounded-lg transition font-medium dark:bg-indigo-600 dark:hover:bg-indigo-700"
+          aria-label="Proceed to options">Next: Options</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Interface Options -->
+    <div id="step2" class="step-content hidden">
+      <div class="options-grid grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+        <div>
+          <label for="interfaceName" class="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2">Interface Name</label>
+          <select id="interfaceName" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" aria-describedby="interfaceNameDesc">
+            <option value="RootObject">RootObject</option>
+            <option value="ApiResponse">ApiResponse</option>
+            <option value="DataModel">DataModel</option>
+            <option value="Custom">Other (Custom)</option>
+          </select>
+          <input type="text" id="customInterfaceName" class="w-full border border-gray-300 rounded-lg p-3 mt-2 hidden focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Enter custom interface name" />
+          <p id="interfaceNameDesc" class="text-xs text-gray-500 dark:text-gray-400 mt-1">Select or enter the main interface name for the generated TypeScript code</p>
+        </div>
+        <div class="checkbox-group flex flex-wrap items-center sm:items-start space-x-4 sm:space-x-6">
+          <label class="flex items-center cursor-pointer">
+            <input type="checkbox" id="optionalProps" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500" />
+            <span class="ml-2 text-sm text-gray-700 dark:text-gray-100">Optional Properties</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="checkbox" id="useTabs" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500" />
+            <span class="ml-2 text-sm text-gray-700 dark:text-gray-100">Use Tabs for Indentation</span>
+          </label>
+        </div>
+      </div>
+      <div class="flex justify-between mt-4">
+        <button onclick="prevStep(1)"
+          class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 sm:px-6 py-2 rounded-lg transition font-medium dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-100"
+          aria-label="Back to JSON input">Back</button>
+        <button onclick="nextStep(3)"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 sm:px-6 py-2 rounded-lg transition font-medium dark:bg-indigo-600 dark:hover:bg-indigo-700"
+          aria-label="Generate interface">Generate Interface</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Output -->
+    <div id="step3" class="step-content hidden">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-2">
+        <label for="tsOutput" class="block text-sm font-medium text-gray-700 dark:text-gray-100">Generated Interface</label>
+        <div class="flex space-x-2">
+          <button id="copyButton" class="tooltip bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-lg transition font-medium disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-100" disabled aria-label="Copy to clipboard">
+            Copy to Clipboard
+            <span class="tooltip-text" id="copyTooltip">Copied!</span>
+          </button>
+          <button onclick="downloadTS()"
+            class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg transition font-medium disabled:opacity-50 disabled:cursor-not-allowed dark:bg-green-600 dark:hover:bg-green-700" id="downloadButton" disabled aria-label="Download TypeScript file">Download .ts</button>
+          <button onclick="generateShareLink()" class="tooltip bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg transition font-medium dark:bg-blue-600 dark:hover:bg-blue-700" aria-label="Share interface">
+            Share
+            <span class="tooltip-text" id="shareTooltip">Link copied!</span>
+          </button>
+        </div>
+      </div>
+      <pre id="tsOutput" class="bg-gray-800 text-gray-100 border border-gray-300 rounded-lg p-3 sm:p-4 overflow-x-auto font-mono text-sm min-h-[120px] sm:min-h-[150px] language-typescript dark:bg-gray-900 dark:text-gray-100 dark:border-gray-600" aria-live="polite"></pre>
+      <div class="flex justify-between mt-4">
+        <button onclick="prevStep(2)"
+          class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 sm:px-6 py-2 rounded-lg transition font-medium dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-100"
+          aria-label="Back to options">Back</button>
+        <button onclick="clearInputs()"
+          class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 sm:px-6 py-2 rounded-lg transition font-medium dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-100"
+          aria-label="Start over">Start Over</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let isDarkMode = localStorage.getItem('darkMode') === 'true';
+    let history = [];
+    let historyIndex = -1;
+    let currentStep = 1;
+
+    // Initialize theme
+    if (isDarkMode) {
+      document.body.classList.add('dark');
+      document.getElementById('tsOutput')?.classList.add('bg-gray-900', 'text-gray-100');
+    }
+
+    function isISODate(str) {
+      return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.*Z$/.test(str);
+    }
+
+    function detectEnum(values) {
+      const uniqueStrings = [...new Set(values.filter(v => typeof v === 'string'))];
+      if (uniqueStrings.length > 0 && uniqueStrings.length <= 5) {
+        return `'${uniqueStrings.join("' | '")}'`;
+      }
+      return null;
+    }
+
+    function generateType(value, key, options, nestedInterfaces = [], level = 0) {
+      const indentChar = options.useTabs ? '\t' : '  ';
+      let type = typeof value;
+
+      if (value === null) {
+        type = 'any';
+      } else if (Array.isArray(value)) {
+        if (value.length === 0) {
+          type = 'any[]';
+        } else {
+          const types = value.map(item => generateType(item, key, options, nestedInterfaces, level + 1).type);
+          const enumType = detectEnum(value);
+          type = enumType ? `${enumType}[]` : [...new Set(types)].join(' | ') + '[]';
+          nestedInterfaces.push(...types.flatMap(t => t.nestedInterfaces || []));
+        }
+      } else if (type === 'object') {
+        const nestedName = key.charAt(0).toUpperCase() + key.slice(1);
+        const nestedResult = jsonToTSInterface(value, nestedName, options, level + 1);
+        type = nestedName;
+        nestedInterfaces.push(nestedResult);
+      } else if (type === 'number') {
+        type = Number.isInteger(value) ? 'number' : 'number';
+      } else if (type === 'boolean') {
+        type = 'boolean';
+      } else if (type === 'string') {
+        type = isISODate(value) ? 'Date' : 'string';
+      }
+
+      return { type, nestedInterfaces };
+    }
+
+    function jsonToTSInterface(json, interfaceName = "RootObject", options = {}, level = 0) {
+      const indentChar = options.useTabs ? '\t' : '  ';
+      const indent = indentChar.repeat(level);
+      const lines = [`${indent}interface ${interfaceName} {`];
+      let nestedInterfaces = [];
+
+      for (const key in json) {
+        const optional = options.optional ? '?' : '';
+        const { type, nestedInterfaces: childInterfaces } = generateType(json[key], key, options, [], level);
+        lines.push(`${indent}${indentChar}${key}${optional}: ${type};`);
+        nestedInterfaces.push(...childInterfaces);
+      }
+
+      lines.push(`${indent}}`);
+
+      return [...nestedInterfaces.map(i => i.toString()), lines.join('\n')].flat().join('\n\n');
+    }
+
+    function validateJSON(input) {
+      try {
+        JSON.parse(input);
+        document.getElementById('jsonError').classList.add('hidden');
+        document.getElementById('jsonInput').classList.remove('error-line');
+        return true;
+      } catch (err) {
+        const errorEl = document.getElementById('jsonError');
+        errorEl.textContent = `Invalid JSON: ${err.message}`;
+        errorEl.classList.remove('hidden');
+        document.getElementById('jsonInput').classList.add('error-line');
+        return false;
+      }
+    }
+
+    function debounce(fn, delay) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+
+    function handleGenerate() {
+      const jsonInput = document.getElementById('jsonInput').value;
+      let interfaceName = document.getElementById('interfaceName').value;
+      if (interfaceName === 'Custom') {
+        interfaceName = document.getElementById('customInterfaceName').value.trim() || 'RootObject';
+      }
+      const optional = document.getElementById('optionalProps').checked;
+      const useTabs = document.getElementById('useTabs').checked;
+
+      const copyButton = document.getElementById('copyButton');
+      const downloadButton = document.getElementById('downloadButton');
+      copyButton.disabled = true;
+      downloadButton.disabled = true;
+      copyButton.classList.add('animate-pulse');
+
+      if (!validateJSON(jsonInput)) {
+        document.getElementById('tsOutput').textContent = 'Invalid JSON input. Please check your JSON format.';
+        copyButton.classList.remove('animate-pulse');
+        return false;
+      }
+
+      try {
+        const json = JSON.parse(jsonInput);
+        const result = jsonToTSInterface(json, interfaceName, { optional, useTabs });
+        const outputEl = document.getElementById('tsOutput');
+        outputEl.textContent = result;
+        Prism.highlightElement(outputEl);
+        copyButton.disabled = false;
+        downloadButton.disabled = false;
+        return true;
+      } catch (err) {
+        document.getElementById('tsOutput').textContent = `Error: ${err.message}`;
+        return false;
+      } finally {
+        copyButton.classList.remove('animate-pulse');
+      }
+    }
+
+    function minifyJSON() {
+      const input = document.getElementById('jsonInput').value;
+      if (validateJSON(input)) {
+        document.getElementById('jsonInput').value = JSON.stringify(JSON.parse(input));
+        saveState();
+      }
+    }
+
+    function beautifyJSON() {
+      const input = document.getElementById('jsonInput').value;
+      if (validateJSON(input)) {
+        document.getElementById('jsonInput').value = JSON.stringify(JSON.parse(input), null, 2);
+        saveState();
+      }
+    }
+
+    function generateShareLink() {
+      const state = {
+        json: document.getElementById('jsonInput').value,
+        name: document.getElementById('interfaceName').value === 'Custom' ? document.getElementById('customInterfaceName').value : document.getElementById('interfaceName').value,
+        optional: document.getElementById('optionalProps').checked,
+        tabs: document.getElementById('useTabs').checked,
+      };
+      const encoded = btoa(JSON.stringify(state));
+      const url = `${window.location.origin}${window.location.pathname}?state=${encoded}`;
+      navigator.clipboard.writeText(url);
+      const tooltip = document.getElementById('shareTooltip');
+      tooltip.textContent = 'Link copied!';
+      tooltip.parentElement.classList.add('tooltip');
+      setTimeout(() => {
+        tooltip.textContent = 'Link copied!';
+        tooltip.parentElement.classList.remove('tooltip');
+      }, 2000);
+    }
+
+    function clearInputs() {
+      document.getElementById('jsonInput').value = '';
+      document.getElementById('interfaceName').value = 'RootObject';
+      document.getElementById('customInterfaceName').value = '';
+      document.getElementById('customInterfaceName').classList.add('hidden');
+      document.getElementById('optionalProps').checked = false;
+      document.getElementById('useTabs').checked = false;
+      document.getElementById('tsOutput').textContent = '';
+      document.getElementById('jsonError').classList.add('hidden');
+      document.getElementById('jsonInput').classList.remove('error-line');
+      document.getElementById('copyButton').disabled = true;
+      document.getElementById('downloadButton').disabled = true;
+      document.getElementById('fileInput').value = '';
+      document.getElementById('jsonTemplates').value = '';
+      saveState();
+      showStep(1);
+    }
+
+    function copyToClipboard() {
+      const output = document.getElementById('tsOutput').textContent;
+      if (!output) return;
+
+      navigator.clipboard.writeText(output).then(() => {
+        const tooltip = document.getElementById('copyTooltip');
+        tooltip.textContent = 'Copied!';
+        tooltip.parentElement.classList.add('tooltip');
+        setTimeout(() => {
+          tooltip.textContent = 'Copy to Clipboard';
+          tooltip.parentElement.classList.remove('tooltip');
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    }
+
+    function downloadTS() {
+      const output = document.getElementById('tsOutput').textContent;
+      if (!output) return;
+
+      const interfaceName = document.getElementById('interfaceName').value === 'Custom' ? document.getElementById('customInterfaceName').value : document.getElementById('interfaceName').value;
+      const blob = new Blob([output], { type: 'text/typescript' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${interfaceName || 'interface'}.ts`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      document.body.classList.toggle('dark', isDarkMode);
+      localStorage.setItem('darkMode', isDarkMode);
+      const outputEl = document.getElementById('tsOutput');
+      if (outputEl) {
+        outputEl.classList.toggle('bg-gray-900', isDarkMode);
+        outputEl.classList.toggle('text-gray-100', isDarkMode);
+        outputEl.classList.toggle('bg-gray-800', !isDarkMode);
+        outputEl.classList.toggle('text-gray-100', !isDarkMode);
+      }
+    }
+
+    function saveState() {
+      const state = {
+        jsonInput: document.getElementById('jsonInput').value,
+        interfaceName: document.getElementById('interfaceName').value,
+        customInterfaceName: document.getElementById('customInterfaceName').value,
+        optionalProps: document.getElementById('optionalProps').checked,
+        useTabs: document.getElementById('useTabs').checked,
+      };
+      localStorage.setItem('appState', JSON.stringify(state));
+      history = history.slice(0, historyIndex + 1);
+      history.push(state);
+      historyIndex++;
+    }
+
+    function undo() {
+      if (historyIndex <= 0) return;
+      historyIndex--;
+      applyState(history[historyIndex]);
+    }
+
+    function redo() {
+      if (historyIndex >= history.length - 1) return;
+      historyIndex++;
+      applyState(history[historyIndex]);
+    }
+
+    function applyState(state) {
+      document.getElementById('jsonInput').value = state.jsonInput;
+      document.getElementById('interfaceName').value = state.interfaceName;
+      document.getElementById('customInterfaceName').value = state.customInterfaceName || '';
+      document.getElementById('customInterfaceName').classList.toggle('hidden', state.interfaceName !== 'Custom');
+      document.getElementById('optionalProps').checked = state.optionalProps;
+      document.getElementById('useTabs').checked = state.useTabs;
+      if (currentStep === 3) {
+        handleGenerate();
+      }
+    }
+
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('jsonInput').value = e.target.result;
+        saveState();
+        if (currentStep === 1) {
+          nextStep(2);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function showStep(step) {
+      const steps = document.querySelectorAll('.step-content');
+      const stepIndicators = document.querySelectorAll('.step');
+      steps.forEach(s => {
+        s.classList.remove('fade-enter-active', 'fade-exit-active');
+        s.classList.add('hidden');
+      });
+      stepIndicators.forEach(s => s.classList.remove('active'));
+
+      const targetStep = document.getElementById(`step${step}`);
+      targetStep.classList.remove('hidden');
+      targetStep.classList.add('fade-enter-active');
+      document.querySelector(`.step[data-step="${step}"]`).classList.add('active');
+      currentStep = step;
+
+      if (step === 3) {
+        handleGenerate();
+      }
+    }
+
+    function nextStep(step) {
+      if (step === 2 && !validateJSON(document.getElementById('jsonInput').value)) {
+        return;
+      }
+      if (step === 3) {
+        if (!handleGenerate()) {
+          return;
+        }
+      }
+      showStep(step);
+    }
+
+    function prevStep(step) {
+      showStep(step);
+    }
+
+    // Interface Name Dropdown
+    document.getElementById('interfaceName').addEventListener('change', (e) => {
+      const customField = document.getElementById('customInterfaceName');
+      customField.classList.toggle('hidden', e.target.value !== 'Custom');
+      if (e.target.value === 'Custom') {
+        customField.focus();
+      }
+      saveState();
+    });
+
+    // JSON Templates
+    document.getElementById('jsonTemplates').addEventListener('change', (e) => {
+      if (e.target.value) {
+        document.getElementById('jsonInput').value = e.target.value;
+        saveState();
+      }
+    });
+
+    // Load saved state or URL state
+    const urlParams = new URLSearchParams(window.location.search);
+    const stateParam = urlParams.get('state');
+    let initialState = null;
+    try {
+      initialState = stateParam ? JSON.parse(atob(stateParam)) : JSON.parse(localStorage.getItem('appState'));
+    } catch (err) {
+      console.error('Failed to load state:', err);
+    }
+    if (initialState) {
+      applyState(initialState);
+      history = [initialState];
+      historyIndex = 0;
+    }
+
+    // Event listeners
+    document.getElementById('copyButton').addEventListener('click', copyToClipboard);
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+    document.getElementById('jsonInput').addEventListener('input', debounce(() => {
+      validateJSON(document.getElementById('jsonInput').value);
+      saveState();
+    }, 500));
+
+    // Drag and drop
+    const jsonInput = document.getElementById('jsonInput');
+    jsonInput.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      jsonInput.classList.add('border-indigo-500');
+    });
+    jsonInput.addEventListener('dragleave', () => {
+      jsonInput.classList.remove('border-indigo-500');
+    });
+    jsonInput.addEventListener('drop', (e) => {
+      e.preventDefault();
+      jsonInput.classList.remove('border-indigo-500');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type === 'application/json') {
+        handleFileUpload({ target: { files: [file] } });
+      }
+    });
+
+    // Initialize first step
+    showStep(1);
+  </script>
+</body>
+</html>
